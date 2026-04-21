@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Nut Project - Handmade Nut Butters & Treats</title>
+<style>
+:root {
+  --ink: #21140d;
+  --muted: #6f5a4b;
+  --paper: rgba(255, 250, 244, 0.78);
+  --line: rgba(94, 55, 28, 0.12);
+  --brand: #7a4320;
+  --brand-deep: #4a2410;
+  --accent: #d8a04a;
+  --shadow: 0 26px 70px rgba(52, 27, 11, 0.16);
+  --success: #2f8c59;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 28%),
+    radial-gradient(circle at 85% 8%, rgba(216, 160, 74, 0.26), transparent 20%),
+    linear-gradient(135deg, #f7efdf 0%, #ead3b2 52%, #f5e9d9 100%);
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+.shell { max-width: 1220px; margin: 0 auto; padding: 24px 20px 64px; }
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  margin-bottom: 22px;
+  border-radius: 26px;
+  background: rgba(73, 38, 18, 0.88);
+  color: #fff9f2;
+  box-shadow: 0 18px 44px rgba(54, 26, 10, 0.2);
+}
+
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #f2ca73, #a55d29);
+  color: #2d170b;
+  font-weight: 700;
+}
+
+.brand-copy small {
+  display: block;
+  color: rgba(255, 248, 239, 0.7);
+  font-size: 0.76rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.brand-copy strong {
+  display: block;
+  font-size: 1.18rem;
+  letter-spacing: 0.04em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  padding: 11px 15px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  font-weight: 700;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.58fr);
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.hero-card,
+.intro-card,
+.section-head,
+.product-card,
+.feature-card,
+.cta-card {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 32px;
+  background: var(--paper);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 620px;
+}
+
+.slides {
+  display: flex;
+  height: 100%;
+  transition: transform 0.8s ease;
+}
+
+.slide {
+  position: relative;
+  min-width: 100%;
+  min-height: 620px;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(25, 13, 7, 0.08) 0%, rgba(25, 13, 7, 0.22) 30%, rgba(25, 13, 7, 0.74) 100%);
+}
+
+.hero-overlay {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  bottom: 28px;
+  z-index: 1;
+  max-width: 560px;
+  padding: 30px;
+  border-radius: 28px;
+  background: rgba(22, 11, 6, 0.58);
+  color: #fff8ef;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #ffd892;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.hero-overlay h1 {
+  margin-bottom: 10px;
+  font-size: clamp(2.5rem, 5vw, 4.4rem);
+  line-height: 0.95;
+}
+
+.hero-overlay p {
+  margin-bottom: 18px;
+  color: rgba(255, 248, 239, 0.84);
+  line-height: 1.7;
+}
+
+.price-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.price-line strong { font-size: 1.5rem; }
+.price-line span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-row,
+.stats,
+.card-actions,
+.feature-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 22px;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary {
+  color: #2f170b;
+  background: linear-gradient(135deg, #f2c96f, var(--accent));
+  box-shadow: 0 14px 28px rgba(216, 160, 74, 0.28);
+}
+
+.btn-secondary {
+  color: #fffaf4;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.slider-controls {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1;
+  display: flex;
+  gap: 10px;
+}
+
+.arrow {
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 249, 240, 0.15);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.intro-card { padding: 26px; }
+
+.intro-card img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 22px;
+  margin-bottom: 18px;
+}
+
+.pill {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(122, 67, 32, 0.08);
+  color: var(--brand);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.intro-card h2 {
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  line-height: 1.02;
+}
+
+.intro-card p {
+  margin-bottom: 16px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.stats { margin: 24px 0; }
+.stat {
+  flex: 1 1 140px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 252, 247, 0.7);
+}
+
+.stat strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1.5rem;
+  color: var(--brand-deep);
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: end;
+  padding: 22px 24px;
+  margin-bottom: 18px;
+}
+
+.section-head small {
+  display: block;
+  color: var(--brand);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.section-head h3 { font-size: 1.8rem; }
+.section-head p {
+  max-width: 50ch;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.product-card { overflow: hidden; }
+.product-card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+.product-body { padding: 22px; }
+.product-body h4 {
+  margin-bottom: 8px;
+  font-size: 1.35rem;
+}
+
+.product-body p {
+  min-height: 78px;
+  margin-bottom: 18px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.feature-card,
+.cta-card { padding: 24px; }
+.feature-card h4,
+.cta-card h3 {
+  margin-bottom: 10px;
+  font-size: 1.25rem;
+}
+
+.feature-card p,
+.cta-card p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.cta-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+
+.toast {
+  position: fixed;
+  top: 22px;
+  right: 22px;
+  z-index: 10;
+  padding: 14px 18px;
+  border-radius: 16px;
+  color: white;
+  background: linear-gradient(135deg, #44a36a, var(--success));
+  box-shadow: 0 18px 36px rgba(47, 140, 89, 0.26);
+}
+
+@media (max-width: 980px) {
+  .hero { grid-template-columns: 1fr; }
+  .feature-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px) {
+  .shell { padding-inline: 14px; }
+  .nav,
+  .section-head,
+  .cta-card { flex-direction: column; align-items: stretch; }
+  .hero-overlay { left: 18px; right: 18px; bottom: 18px; padding: 22px; }
+  .intro-card,
+  .feature-card,
+  .cta-card,
+  .product-body { padding: 20px; }
+}
+</style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav">
+      <div class="brand">
+        <div class="brand-mark">N</div>
+        <div class="brand-copy">
+          <small>Homemade Nut Butters & Treats</small>
+          <strong>The Nut Project</strong>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="#shop">Shop</a>
+        <a href="#why">Why Us</a>
+        <a href="https://www.instagram.com/thenutproject_?igsh=cnVkcHNvZHdmN3l6" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="cart.html">Cart <span id="cartCount">0</span></a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-card">
+        <div class="slides" id="slides">
+          <article class="slide">
+            <img src="extracted-photos/photo-03.jpg" alt="Thecha Peanut Butter">
+            <div class="hero-overlay">
+              <span class="eyebrow">Bold Twist</span>
+              <h1>Thecha Peanut Butter</h1>
+              <p>A bold, fiery twist on classic peanut butter with savory spice and deep roasted nuttiness.</p>
+              <div class="price-line">
+                <strong>Rs 389</strong>
+                <span>300 g jar</span>
+              </div>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="thecha-peanut-butter.html">View Product</a>
+                <button class="btn btn-secondary" onclick="addToCart('Thecha Peanut Butter', 389, 1, '300 g jar')">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <img src="extracted-photos/photo-06.jpg" alt="Peanut Butter Crunchy">
+            <div class="hero-overlay">
+              <span class="eyebrow">Classic Favorite</span>
+              <h1>Peanut Butter (Crunchy)</h1>
+              <p>Creamy peanut butter layered with roasted peanut pieces for a satisfying crunch and bold roasted flavor.</p>
+              <div class="price-line">
+                <strong>Rs 349</strong>
+                <span>350 g jar</span>
+              </div>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="crunchy-peanut-butter.html">View Product</a>
+                <button class="btn btn-secondary" onclick="addToCart('Peanut Butter (Crunchy)', 349, 1, '350 g jar')">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <img src="extracted-photos/photo-07.jpg" alt="Cashew Mocha Butter">
+            <div class="hero-overlay">
+              <span class="eyebrow">Coffee Cocoa Blend</span>
+              <h1>Cashew Mocha Butter</h1>
+              <p>Silky cashew butter infused with cocoa and a hint of coffee for a bold, aromatic spread.</p>
+              <div class="price-line">
+                <strong>Rs 479</strong>
+                <span>300 g jar</span>
+              </div>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="cashew-mocha-butter.html">View Product</a>
+                <button class="btn btn-secondary" onclick="addToCart('Cashew Mocha Butter', 479, 1, '300 g jar')">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <img src="extracted-photos/photo-09.jpg" alt="Tahini">
+            <div class="hero-overlay">
+              <span class="eyebrow">Roasted Sesame</span>
+              <h1>Tahini</h1>
+              <p>Finely ground roasted sesame seeds crafted into a rich, creamy paste with deep nutty undertones.</p>
+              <div class="price-line">
+                <strong>Rs 399</strong>
+                <span>300 g jar</span>
+              </div>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="tahini.html">View Product</a>
+                <button class="btn btn-secondary" onclick="addToCart('Tahini', 399, 1, '300 g jar')">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <img src="extracted-photos/photo-10.jpg" alt="Podi Almonds">
+            <div class="hero-overlay">
+              <span class="eyebrow">Savory Snack</span>
+              <h1>Podi Almonds</h1>
+              <p>Crunchy roasted almonds tossed in a fragrant South Indian spice blend for a bold and savory bite.</p>
+              <div class="price-line">
+                <strong>Rs 329</strong>
+                <span>180 g pouch</span>
+              </div>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="podi-almonds.html">View Product</a>
+                <button class="btn btn-secondary" onclick="addToCart('Podi Almonds', 329, 1, '180 g pouch')">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="slide">
+            <img src="extracted-photos/photo-14.jpg" alt="Chocolate Nut Clusters">
+            <div class="hero-overlay">
+              <span class="eyebrow">Sweet Treat</span>
+              <h1>Chocolate Nut Clusters</h1>
+              <p>Roasted nuts and seeds bound together with rich chocolate to create indulgent bite-sized clusters.</p>
+              <div class="price-line">
+                <strong>Rs 319</strong>
+                <span>180 g box</span>
+              </div>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="chocolate-nut-clusters.html">View Product</a>
+                <button class="btn btn-secondary" onclick="addToCart('Chocolate Nut Clusters', 319, 1, '180 g box')">Add to Cart</button>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="slider-controls">
+          <button class="arrow" id="prev" aria-label="Previous slide">&#8592;</button>
+          <button class="arrow" id="next" aria-label="Next slide">&#8594;</button>
+        </div>
+      </div>
+
+      <aside class="intro-card">
+        <img src="extracted-photos/photo-01.jpg" alt="The Nut Project brand poster">
+        <span class="pill">Clean Ingredients | Bold Flavours | Small Batch</span>
+        <h2>The real lineup from The Nut Project.</h2>
+        <p>The homepage now uses your actual product photos and real product names from the PDF, so the site feels like the brand itself instead of a generic mockup.</p>
+        <p>From handcrafted nut butters to savory almonds, granola, and chocolate treats, the collection feels much more authentic now.</p>
+        <div class="stats">
+          <div class="stat">
+            <strong>9</strong>
+            real products on the storefront
+          </div>
+          <div class="stat">
+            <strong>1 tap</strong>
+            WhatsApp order flow
+          </div>
+          <div class="stat">
+            <strong>Instagram</strong>
+            linked into the brand experience
+          </div>
+        </div>
+        <a class="btn btn-primary" href="#shop">Browse Collection</a>
+      </aside>
+    </section>
+
+    <section id="shop">
+      <div class="section-head">
+        <div>
+          <small>Collection</small>
+          <h3>Handmade nut butters, snacks, and treats.</h3>
+        </div>
+        <p>The lineup below is now based on the actual products visible in your supplied PDF, including renamed pages where needed.</p>
+      </div>
+
+      <div class="products">
+        <article class="product-card">
+          <img src="extracted-photos/photo-03.jpg" alt="Thecha Peanut Butter">
+          <div class="product-body">
+            <span class="pill">Spicy Spread</span>
+            <h4>Thecha Peanut Butter</h4>
+            <p>A savory, fiery twist on classic peanut butter with bold spice and roasted peanut richness.</p>
+            <div class="meta-row"><span>Rs 389</span><span>300 g jar</span></div>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="thecha-peanut-butter.html">Open</a>
+              <button class="btn" style="background: rgba(122, 67, 32, 0.08); color: var(--brand);" onclick="addToCart('Thecha Peanut Butter', 389, 1, '300 g jar')">Add</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="extracted-photos/photo-04.jpg" alt="Chilli Lime Tahini">
+          <div class="product-body">
+            <span class="pill">Zesty Sesame</span>
+            <h4>Chilli Lime Tahini</h4>
+            <p>A bold creamy sesame spread with garlic, chilli heat, and a bright lime kick.</p>
+            <div class="meta-row"><span>Rs 429</span><span>280 g jar</span></div>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="chilli-lime-tahini.html">Open</a>
+              <button class="btn" style="background: rgba(122, 67, 32, 0.08); color: var(--brand);" onclick="addToCart('Chilli Lime Tahini', 429, 1, '280 g jar')">Add</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="extracted-photos/photo-06.jpg" alt="Peanut Butter Crunchy">
+          <div class="product-body">
+            <span class="pill">Crunchy Classic</span>
+            <h4>Peanut Butter (Crunchy)</h4>
+            <p>Creamy peanut butter layered with roasted peanut pieces for crunch and bold roasted character.</p>
+            <div class="meta-row"><span>Rs 349</span><span>350 g jar</span></div>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="crunchy-peanut-butter.html">Open</a>
+              <button class="btn" style="background: rgba(122, 67, 32, 0.08); color: var(--brand);" onclick="addToCart('Peanut Butter (Crunchy)', 349, 1, '350 g jar')">Add</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="extracted-photos/photo-07.jpg" alt="Cashew Mocha Butter">
+          <div class="product-body">
+            <span class="pill">Mocha Blend</span>
+            <h4>Cashew Mocha Butter</h4>
+            <p>Silky cashew butter infused with cocoa and coffee for a bold, aromatic, dessert-friendly spread.</p>
+            <div class="meta-row"><span>Rs 479</span><span>300 g jar</span></div>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="cashew-mocha-butter.html">Open</a>
+              <button class="btn" style="background: rgba(122, 67, 32, 0.08); color: var(--brand);" onclick="addToCart('Cashew Mocha Butter', 479, 1, '300 g jar')">Add</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="extracted-photos/photo-09.jpg" alt="Tahini">
+          <div class="product-body">
+            <span class="pill">Roasted Sesame</span>
+            <h4>Tahini</h4>
+            <p>Finely ground roasted sesame seeds crafted into a rich and versatile creamy paste.</p>
+            <div class="meta-row"><span>Rs 399</span><span>300 g jar</span></div>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="tahini.html">Open</a>
+              <button class="btn" style="background: rgba(122, 67, 32, 0.08); color: var(--brand);" onclick="addToCart('Tahini', 399, 1, '300 g jar')">Add</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="extracted-photos/photo-10.jpg" alt="Podi Almonds">
+          <div class="product-body">
+            <span class="pill">Savory Crunch</span>
+            <h4>Podi Almonds</h4>
+            <p>Roasted almonds tossed in podi spice for a crunchy, savory South Indian inspired snack.</p>
+            <div class="meta-row"><span>Rs 329</span><span>180 g pouch</span></div>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="podi-almonds.html">Open</a>
+              <button class="btn" style="background: rgba(122, 67, 32, 0.08); color: var(--brand);" onclick="addToCart('Podi Almonds', 329, 1, '180 g pouch')">Add</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="extracted-photos/photo-11.jpg" alt="Minty Pumpkin Crunch">
+          <div class="product-body">
+            <span class="pill">Seed Snack</span>
+            <h4>Minty Pumpkin Crunch</h4>
+            <p>Crunchy pumpkin seeds lightly seasoned with a refreshing mint profile for a lighter snack option.</p>
+            <div class="meta-row"><span>Rs 279</span><span>180 g pouch</span></div>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="minty-pumpkin-crunch.html">Open</a>
+              <button class="btn" style="background: rgba(122, 67, 32, 0.08); color: var(--brand);" onclick="addToCart('Minty Pumpkin Crunch', 279, 1, '180 g pouch')">Add</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="extracted-photos/photo-13.jpg" alt="Gluten-free Granola">
+          <div class="product-body">
+            <span class="pill">Breakfast Mix</span>
+            <h4>Gluten-free Granola</h4>
+            <p>A colorful seed and fruit-packed granola blend made for quick breakfasts and wholesome snacking.</p>
+            <div class="meta-row"><span>Rs 349</span><span>250 g pouch</span></div>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="gluten-free-granola.html">Open</a>
+              <button class="btn" style="background: rgba(122, 67, 32, 0.08); color: var(--brand);" onclick="addToCart('Gluten-free Granola', 349, 1, '250 g pouch')">Add</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <img src="extracted-photos/photo-14.jpg" alt="Chocolate Nut Clusters">
+          <div class="product-body">
+            <span class="pill">Chocolate Treat</span>
+            <h4>Chocolate Nut Clusters</h4>
+            <p>Roasted nuts and seeds clustered with rich chocolate for a crunchy, indulgent bite-sized treat.</p>
+            <div class="meta-row"><span>Rs 319</span><span>180 g box</span></div>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="chocolate-nut-clusters.html">Open</a>
+              <button class="btn" style="background: rgba(122, 67, 32, 0.08); color: var(--brand);" onclick="addToCart('Chocolate Nut Clusters', 319, 1, '180 g box')">Add</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="why">
+      <div class="section-head">
+        <div>
+          <small>Why It Feels Real</small>
+          <h3>Your actual products are now leading the site.</h3>
+        </div>
+        <p>The storefront now reflects real brand photos and actual product names from The Nut Project, which makes the whole site more trustworthy and personal.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <h4>Real product identity</h4>
+          <p>Placeholder items like hazelnut cream and generic mixed nut butter have been replaced with products that actually appear in your PDF.</p>
+        </article>
+        <article class="feature-card">
+          <h4>Stronger brand connection</h4>
+          <p>The homepage now uses The Nut Project branding artwork and connects naturally to Instagram and WhatsApp ordering.</p>
+        </article>
+        <article class="feature-card">
+          <h4>Better visual trust</h4>
+          <p>Real food photography makes the site feel like an actual small business storefront instead of a sample design.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-card" style="margin-bottom: 22px;">
+      <div>
+        <h3>Follow The Nut Project on Instagram</h3>
+        <p>See product drops, styling, jars, and treats on the official Instagram profile.</p>
+      </div>
+      <a class="btn btn-primary" href="https://www.instagram.com/thenutproject_?igsh=cnVkcHNvZHdmN3l6" target="_blank" rel="noopener noreferrer">Open Instagram</a>
+    </section>
+
+    <section class="cta-card">
+      <div>
+        <h3>Ready to place an order?</h3>
+        <p>Add products to the cart and send the full summary through WhatsApp in one go.</p>
+      </div>
+      <a class="btn btn-primary" href="cart.html">Open Cart</a>
+    </section>
+  </div>
+
+<script>
+const slides = document.getElementById("slides");
+const slideCount = document.querySelectorAll(".slide").length;
+const cartCount = document.getElementById("cartCount");
+let currentSlide = 0;
+
+function normalizeCart(cart) {
+  return cart.map((item) => {
+    if (typeof item === "string") {
+      return { name: item, price: 0, qty: 1, size: "" };
+    }
+    return {
+      name: item.name || "Item",
+      price: Number(item.price) || 0,
+      qty: Number(item.qty) || 1,
+      size: item.size || ""
+    };
+  });
+}
+
+function getCart() {
+  return normalizeCart(JSON.parse(localStorage.getItem("cart")) || []);
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function updateCartCount() {
+  cartCount.textContent = getCart().reduce((sum, item) => sum + item.qty, 0);
+}
+
+function addToCart(name, price, qty, size) {
+  const cart = getCart();
+  const existing = cart.find((item) => item.name === name && item.size === size);
+  if (existing) {
+    existing.qty += qty;
+  } else {
+    cart.push({ name, price, qty, size });
+  }
+  saveCart(cart);
+  updateCartCount();
+
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = `${name} added to cart`;
+  document.body.appendChild(toast);
+  window.setTimeout(() => toast.remove(), 2200);
+}
+
+function showSlide(index) {
+  currentSlide = (index + slideCount) % slideCount;
+  slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+}
+
+document.getElementById("next").addEventListener("click", () => showSlide(currentSlide + 1));
+document.getElementById("prev").addEventListener("click", () => showSlide(currentSlide - 1));
+window.setInterval(() => showSlide(currentSlide + 1), 5000);
+
+updateCartCount();
+</script>
+</body>
+</html>

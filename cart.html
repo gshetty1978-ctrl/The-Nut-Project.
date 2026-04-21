@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart</title>
+<style>
+:root {
+  --ink: #21140d;
+  --muted: #6c594c;
+  --paper: rgba(255, 249, 242, 0.82);
+  --line: rgba(94, 55, 28, 0.12);
+  --brand: #7a4320;
+  --brand-deep: #4a2410;
+  --accent: #d8a04a;
+  --success: #2d8a57;
+  --danger: #754332;
+  --shadow: 0 26px 70px rgba(52, 27, 11, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  padding: 24px 18px 56px;
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 28%),
+    radial-gradient(circle at 88% 8%, rgba(216, 160, 74, 0.24), transparent 18%),
+    linear-gradient(135deg, #f7efdf 0%, #ead4b4 52%, #f5e9d9 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shell {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+  border-radius: 26px;
+  background: rgba(73, 38, 18, 0.88);
+  color: #fff9f2;
+  box-shadow: 0 18px 44px rgba(54, 26, 10, 0.2);
+}
+
+.topbar strong {
+  display: block;
+  font-size: 1.2rem;
+}
+
+.topbar span {
+  color: rgba(255, 248, 239, 0.7);
+}
+
+.topbar a {
+  padding: 11px 15px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  font-weight: 700;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(290px, 0.54fr);
+  gap: 18px;
+}
+
+.panel {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 32px;
+  background: var(--paper);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.cart-panel {
+  padding: 28px;
+}
+
+.cart-panel h1 {
+  margin-bottom: 10px;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+}
+
+.cart-panel > p {
+  margin-bottom: 20px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+#cartList {
+  list-style: none;
+}
+
+#cartList li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  margin-bottom: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255, 252, 247, 0.75);
+}
+
+.item-copy strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1.08rem;
+}
+
+.item-copy span {
+  display: block;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.item-meta span {
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(122, 67, 32, 0.08);
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.item-side {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 10px;
+}
+
+.item-price {
+  font-weight: 700;
+  color: var(--brand-deep);
+}
+
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-controls button,
+.remove-btn,
+.actions button,
+.summary a {
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-weight: 700;
+}
+
+.qty-controls button {
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  color: var(--brand-deep);
+  background: rgba(122, 67, 32, 0.08);
+}
+
+.qty-controls span {
+  min-width: 26px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.remove-btn {
+  padding: 10px 14px;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(135deg, #8a5944, var(--danger));
+}
+
+.empty {
+  display: block;
+  padding: 28px;
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.actions {
+  display: none;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+.actions button,
+.summary a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 20px;
+  cursor: pointer;
+}
+
+.clear-btn {
+  color: white;
+  background: linear-gradient(135deg, #8a5944, var(--danger));
+  box-shadow: 0 16px 30px rgba(117, 67, 50, 0.24);
+}
+
+.order-btn {
+  color: white;
+  background: linear-gradient(135deg, #45a86d, var(--success));
+  box-shadow: 0 16px 30px rgba(45, 138, 87, 0.24);
+}
+
+.summary {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+}
+
+.summary-card {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: rgba(255, 252, 247, 0.74);
+}
+
+.summary-card small {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--brand);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.summary-card h2 {
+  margin-bottom: 10px;
+  font-size: 1.55rem;
+}
+
+.summary-card p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.totals {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.totals div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+}
+
+.totals strong {
+  color: var(--brand-deep);
+}
+
+.summary .primary-link {
+  color: #2f170b;
+  background: linear-gradient(135deg, #f2c96f, var(--accent));
+  box-shadow: 0 14px 28px rgba(216, 160, 74, 0.28);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.tag-list span {
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(122, 67, 32, 0.08);
+  color: var(--brand);
+  font-weight: 700;
+}
+
+@media (max-width: 920px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .topbar,
+  #cartList li,
+  .actions {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item-side {
+    align-items: stretch;
+  }
+
+  .actions button,
+  .summary a,
+  .topbar a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .cart-panel,
+  .summary {
+    padding: 20px;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div>
+        <strong>Nut Project Cart</strong>
+        <span>Review quantities, totals, and send the full order in one WhatsApp message.</span>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a href="https://www.instagram.com/thenutproject_?igsh=cnVkcHNvZHdmN3l6" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="index.html">Continue Shopping</a>
+      </div>
+    </div>
+
+    <div class="layout">
+      <section class="panel cart-panel">
+        <h1>Your Cart</h1>
+        <p>The cart now behaves more like a real storefront basket, with quantities, item totals, and a clean order summary.</p>
+        <ul id="cartList"></ul>
+        <div class="actions" id="actions">
+          <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+          <button class="order-btn" onclick="checkout()">Order on WhatsApp</button>
+        </div>
+      </section>
+
+      <aside class="panel summary">
+        <div class="summary-card">
+          <small>Order Summary</small>
+          <h2>Totals at a glance</h2>
+          <p>Your WhatsApp message will include each item, pack size, quantity, and order total.</p>
+          <div class="totals">
+            <div><span>Items</span><strong id="itemCount">0</strong></div>
+            <div><span>Subtotal</span><strong id="subtotal">Rs 0</strong></div>
+            <div><span>Estimated total</span><strong id="grandTotal">Rs 0</strong></div>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <small>Store Notes</small>
+          <p>This page is visually aligned with the rest of the site now, so it feels like the same brand experience instead of a utility page.</p>
+          <div class="tag-list">
+            <span>Quantity controls</span>
+            <span>Live totals</span>
+            <span>WhatsApp checkout</span>
+          </div>
+        </div>
+
+        <a class="primary-link" href="index.html">Browse More Products</a>
+      </aside>
+    </div>
+  </div>
+
+<script>
+function normalizeCart(cart) {
+  return cart.map((item) => {
+    if (typeof item === "string") {
+      return { name: item, price: 0, qty: 1, size: "" };
+    }
+    return {
+      name: item.name || "Item",
+      price: Number(item.price) || 0,
+      qty: Math.max(1, Number(item.qty) || 1),
+      size: item.size || ""
+    };
+  });
+}
+
+function getCart() {
+  return normalizeCart(JSON.parse(localStorage.getItem("cart")) || []);
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function formatPrice(value) {
+  return `Rs ${value}`;
+}
+
+function updateCartDisplay() {
+  const cart = getCart();
+  const list = document.getElementById("cartList");
+  const actions = document.getElementById("actions");
+  const itemCount = document.getElementById("itemCount");
+  const subtotal = document.getElementById("subtotal");
+  const grandTotal = document.getElementById("grandTotal");
+
+  list.innerHTML = "";
+
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+  itemCount.textContent = totalItems;
+  subtotal.textContent = formatPrice(totalPrice);
+  grandTotal.textContent = formatPrice(totalPrice);
+
+  if (cart.length === 0) {
+    const emptyItem = document.createElement("li");
+    emptyItem.className = "empty";
+    emptyItem.textContent = "Your cart is empty for now.";
+    list.appendChild(emptyItem);
+    actions.style.display = "none";
+    return;
+  }
+
+  cart.forEach((item, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <div class="item-copy">
+        <strong>${item.name}</strong>
+        <span>${item.size || "Standard pack"}</span>
+        <div class="item-meta">
+          <span>${formatPrice(item.price)}</span>
+          <span>Line total: ${formatPrice(item.price * item.qty)}</span>
+        </div>
+      </div>
+      <div class="item-side">
+        <div class="item-price">Item #${index + 1}</div>
+        <div class="qty-controls">
+          <button onclick="changeQty(${index}, -1)">-</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty(${index}, 1)">+</button>
+        </div>
+        <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+      </div>
+    `;
+    list.appendChild(li);
+  });
+
+  actions.style.display = "flex";
+}
+
+function changeQty(index, delta) {
+  const cart = getCart();
+  if (!cart[index]) {
+    return;
+  }
+
+  cart[index].qty = Math.max(1, cart[index].qty + delta);
+  saveCart(cart);
+  updateCartDisplay();
+}
+
+function removeItem(index) {
+  const cart = getCart();
+  cart.splice(index, 1);
+  saveCart(cart);
+  updateCartDisplay();
+}
+
+function clearCart() {
+  const confirmed = window.confirm("Clear everything from your cart?");
+  if (!confirmed) {
+    return;
+  }
+  localStorage.removeItem("cart");
+  updateCartDisplay();
+}
+
+function checkout() {
+  const cart = getCart();
+  if (cart.length === 0) {
+    return;
+  }
+
+  const phone = "919890270078";
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const lines = cart.map((item, index) => {
+    const size = item.size ? ` - ${item.size}` : "";
+    return `${index + 1}. ${item.name}${size} x ${item.qty} = ${formatPrice(item.price * item.qty)}`;
+  }).join("\n");
+
+  const message = encodeURIComponent(
+    `Hi! I want to order these items:\n\n${lines}\n\nTotal items: ${totalItems}\nEstimated total: ${formatPrice(totalPrice)}`
+  );
+
+  window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
+}
+
+updateCartDisplay();
+</script>
+</body>
+</html>
