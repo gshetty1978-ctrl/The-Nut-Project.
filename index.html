@@ -23,6 +23,8 @@ body {
   min-height: 100vh;
   font-family: Georgia, "Times New Roman", serif;
   color: var(--ink);
+  user-select: none;
+  -webkit-user-select: none;
   background:
     radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 28%),
     radial-gradient(circle at 85% 8%, rgba(216, 160, 74, 0.26), transparent 20%),
@@ -807,6 +809,22 @@ document.getElementById("prev").addEventListener("click", () => showSlide(curren
 window.setInterval(() => showSlide(currentSlide + 1), 5000);
 
 updateCartCount();
+</script>
+<script>
+document.addEventListener("contextmenu", (event) => event.preventDefault());
+document.addEventListener("copy", (event) => event.preventDefault());
+document.addEventListener("cut", (event) => event.preventDefault());
+document.addEventListener("selectstart", (event) => event.preventDefault());
+document.addEventListener("dragstart", (event) => event.preventDefault());
+document.addEventListener("keydown", (event) => {
+  const key = event.key.toLowerCase();
+  if ((event.ctrlKey || event.metaKey) && ["a", "c", "s", "u", "p", "x"].includes(key)) {
+    event.preventDefault();
+  }
+  if (key === "f12") {
+    event.preventDefault();
+  }
+});
 </script>
 </body>
 </html>

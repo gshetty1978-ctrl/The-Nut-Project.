@@ -29,6 +29,8 @@ body {
   padding: 24px 18px 56px;
   font-family: Georgia, "Times New Roman", serif;
   color: var(--ink);
+  user-select: none;
+  -webkit-user-select: none;
   background:
     radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 28%),
     radial-gradient(circle at 88% 8%, rgba(216, 160, 74, 0.24), transparent 18%),
@@ -513,6 +515,22 @@ function checkout() {
 }
 
 updateCartDisplay();
+</script>
+<script>
+document.addEventListener("contextmenu", (event) => event.preventDefault());
+document.addEventListener("copy", (event) => event.preventDefault());
+document.addEventListener("cut", (event) => event.preventDefault());
+document.addEventListener("selectstart", (event) => event.preventDefault());
+document.addEventListener("dragstart", (event) => event.preventDefault());
+document.addEventListener("keydown", (event) => {
+  const key = event.key.toLowerCase();
+  if ((event.ctrlKey || event.metaKey) && ["a", "c", "s", "u", "p", "x"].includes(key)) {
+    event.preventDefault();
+  }
+  if (key === "f12") {
+    event.preventDefault();
+  }
+});
 </script>
 </body>
 </html>
